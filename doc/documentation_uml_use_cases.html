@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Inventory Management System — UML Use Case Documentation</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; line-height:1.5; margin: 24px; color: #0f172a; background:#f8fafc; }
+    header { margin-bottom: 24px; }
+    h1 { font-size: 28px; margin: 0 0 6px 0; }
+    p.lead { margin: 0 0 12px 0; color:#334155; }
+    .diagram { background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(2,6,23,0.06); margin-bottom: 18px; }
+    section { margin-bottom: 28px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; border-radius: 6px; overflow: hidden; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e6eef6; vertical-align: top; font-size: 14px; }
+    th { background:#f1f9ff; color:#0f172a; font-weight:600; }
+    caption { text-align:left; font-weight:600; margin-bottom:6px; }
+    code { background:#eef2ff; padding:2px 6px; border-radius:4px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace; }
+    .small { font-size: 13px; color: #475569; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media(min-width:900px){ .grid { grid-template-columns: 1fr 1fr; } }
+    .badge { display:inline-block; background:#e0f2fe; padding:4px 8px; border-radius:999px; font-size:13px; color:#0369a1; margin-right:6px; }
+    footer { margin-top: 28px; color:#475569; font-size:13px; }
+  </style>
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad:true, theme: 'base', securityLevel: 'loose' });</script>
+</head>
+<body>
+  <header>
+    <h1>Inventory Management System — UML Use Case Documentation</h1>
+    <p class="lead">Complete list of use cases, diagrams and flows for the Technical Test inventory management system (backend: FastAPI + SQL, frontend: SPA/HTML). Includes required and optional scenarios.</p>
+  </header>
+
+  <!-- High-level Use Case Diagram -->
+  <section>
+    <h2>Overview — High-level Use Case Diagram</h2>
+    <div class="diagram">
+      <div class="mermaid">
+        %% High-level system use case diagram
+        %% Actors: Guest, AuthenticatedUser, Admin, ExternalSystem
+        %% Use cases: Register, Login, Logout, Manage Products (CRUD), View Dashboard, Inventory Transactions, Search/Filter, Upload Image, Export/Import, Manage Users, View Audit
+        usecaseDiagram
+          actor Guest
+          actor AuthenticatedUser as User
+          actor Admin
+          actor ExternalSystem as "External\nSystem (CSV/ERP)"
+
+          Guest --> (Register)
+          Guest --> (Login)
+
+          User --> (Logout)
+          User --> (View Dashboard)
+          User --> (List Products)
+          User --> (Get Product Details)
+          User --> (Create Product)
+          User --> (Update Product)
+          User --> (Delete Product)
+          User --> (Adjust Inventory) 
+          User --> (Search / Filter / Sort)
+          User --> (Upload Product Image)
+          User --> (Export Inventory)
+
+          Admin --> (Manage Users)
+          Admin --> (View Audit Logs)
+          Admin --> (Generate Reports)
+          ExternalSystem --> (Import Inventory)
+      </div>
+    </div>
+  </section>
+
+  <!-- Focused diagrams -->
+  <section>
+    <h2>Authentication Use Cases</h2>
+    <div class="diagram">
+      <div class="mermaid">
+        %% Authentication use cases
+        usecaseDiagram
+          actor Guest
+          actor User
+          
+          Guest --> (Register Account)
+          Guest --> (Login with credentials)
+          User --> (Logout)
+          User --> (Refresh Token)
+          User --> (Request Password Reset)
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Register Account</caption>
+        <table>
+          <tr><th>Actor</th><td>Guest</td></tr>
+          <tr><th>Preconditions</th><td>Guest has email and desired username; registration endpoint available</td></tr>
+          <tr><th>Main Flow</th><td>1. Guest submits registration data (username, email, password).<br>2. System validates data.<br>3. System creates user record (password hashed).<br>4. System returns success / sends verification email (optional).</td></tr>
+          <tr><th>Alternate Flows</th><td>Validation fails — return 4xx with error. Email already used — return 409 Conflict. Captcha fails — reject.</td></tr>
+          <tr><th>Postconditions</th><td>User created (inactive or active depending on verification), can now log in.</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Login with credentials</caption>
+        <table>
+          <tr><th>Actor</th><td>Guest</td></tr>
+          <tr><th>Preconditions</th><td>User exists and is active</td></tr>
+          <tr><th>Main Flow</th><td>1. Guest posts credentials to /auth/login.<br>2. System validates credentials; on success issues access token (JWT) and optional refresh token.<br>3. Client stores tokens and uses them on protected endpoints.</td></tr>
+          <tr><th>Alternate Flows</th><td>Invalid credentials — 401 Unauthorized. Account disabled — 403 Forbidden. Rate limit exceeded — 429.</td></tr>
+          <tr><th>Postconditions</th><td>Client has valid JWT for authenticated requests.</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Refresh Token</caption>
+        <table>
+          <tr><th>Actor</th><td>User</td></tr>
+          <tr><th>Preconditions</th><td>Valid refresh token exists</td></tr>
+          <tr><th>Main Flow</th><td>Client calls /auth/refresh with refresh token → server validates → issues new access token (and optionally new refresh token).</td></tr>
+          <tr><th>Alternate Flows</th><td>Refresh token expired/invalid → force re-login.</td></tr>
+          <tr><th>Postconditions</th><td>New access token granted.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Product Management Use Cases (CRUD + Media)</h2>
+    <div class="diagram">
+      <div class="mermaid">
+        %% Product management use case diagram
+        usecaseDiagram
+          actor User
+          actor Admin
+          User --> (List Products)
+          User --> (View Product)
+          User --> (Create Product)
+          User --> (Update Product)
+          User --> (Delete Product)
+          User --> (Upload Image)
+          User --> (Search / Filter / Sort)
+          Admin --> (Bulk Import Products)
+          Admin --> (Bulk Export Products)
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Create Product</caption>
+        <table>
+          <tr><th>Actor</th><td>User (authenticated) / Admin</td></tr>
+          <tr><th>Preconditions</th><td>Authenticated; valid product DTO (name, price, quantity, optional image URL)</td></tr>
+          <tr><th>Main Flow</th><td>1. Client POSTs product DTO to /v1/products.<br>2. Controller validates input and maps DTO to domain input.<br>3. Application use case calls repository.create(product).<br>4. Repository persists to DB and returns product entity.<br>5. Controller returns 201 Created with product representation.</td></tr>
+          <tr><th>Alternate Flows</th><td>Validation error (400). SKU conflict (409). DB failure (500).</td></tr>
+          <tr><th>Postconditions</th><td>Product persisted; inventory count set.</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> List Products / Get Product</caption>
+        <table>
+          <tr><th>Actor</th><td>User / Guest (depending on policy)</td></tr>
+          <tr><th>Preconditions</th><td>None (or auth depending on API policy)</td></tr>
+          <tr><th>Main Flow</th><td>GET /v1/products?filter... returns paginated list. GET /v1/products/{id} returns details.</td></tr>
+          <tr><th>Alternate Flows</th><td>Product not found → 404. Query param invalid → 400.</td></tr>
+          <tr><th>Postconditions</th><td>Products returned for UI rendering.</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Update / Delete Product</caption>
+        <table>
+          <tr><th>Actor</th><td>User / Admin</td></tr>
+          <tr><th>Preconditions</th><td>Product exists; authenticated with permission</td></tr>
+          <tr><th>Main Flow</th><td>PUT/PATCH to /v1/products/{id} updates fields via use case → repository.save → returns updated entity. DELETE /v1/products/{id} marks deleted or removes record.</td></tr>
+          <tr><th>Alternate Flows</th><td>Concurrent update conflict → 409 or optimistic locking. Not found → 404.</td></tr>
+          <tr><th>Postconditions</th><td>Product updated/deleted; audit log appended (optional).</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Upload Product Image</caption>
+        <table>
+          <tr><th>Actor</th><td>User</td></tr>
+          <tr><th>Preconditions</th><td>Valid image file or image URL; permission to modify product</td></tr>
+          <tr><th>Main Flow</th><td>Client uploads image or provides URL → server validates → stores in storage (S3 or DB) or validates URL → repository updates product image_url.</td></tr>
+          <tr><th>Alternate Flows</th><td>Invalid file type → 415 Unsupported Media Type. Storage error → 500.</td></tr>
+          <tr><th>Postconditions</th><td>Product has image_url updated.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Inventory Transactions & Stock Control</h2>
+    <div class="diagram">
+      <div class="mermaid">
+        %% Inventory transaction diagram
+        usecaseDiagram
+          actor User
+          actor Admin
+          User --> (Record Inventory In)
+          User --> (Record Inventory Out)
+          User --> (Adjust Inventory)
+          User --> (View Inventory History)
+          Admin --> (Reconcile Inventory)
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Record Inventory In/Out</caption>
+        <table>
+          <tr><th>Actor</th><td>User</td></tr>
+          <tr><th>Preconditions</th><td>Product exists; authenticated</td></tr>
+          <tr><th>Main Flow</th><td>POST /v1/products/{id}/inventory with {change_quantity:+, transaction_type} → use case creates inventory transaction → repository persists → domain updates product.quantity (within a transactional boundary) → returns transaction record.</td></tr>
+          <tr><th>Alternate Flows</th><td>Negative resulting stock disallowed → reject (400) unless adjustments allowed. DB deadlock → retry/notify.</td></tr>
+          <tr><th>Postconditions</th><td>Inventory transaction stored; product stock updated; optional domain event emitted.</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> View Inventory History</caption>
+        <table>
+          <tr><th>Actor</th><td>User</td></tr>
+          <tr><th>Preconditions</th><td>Product exists; permission to view history</td></tr>
+          <tr><th>Main Flow</th><td>GET /v1/products/{id}/transactions returns paginated transactions sorted by created_at.</td></tr>
+          <tr><th>Alternate Flows</th><td>Large result set — support pagination/filters.</td></tr>
+          <tr><th>Postconditions</th><td>Transaction history returned.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Admin, Reporting & Integration Use Cases</h2>
+    <div class="diagram">
+      <div class="mermaid">
+        %% Admin & integration
+        usecaseDiagram
+          actor Admin
+          actor ExternalSystem
+          
+          Admin --> (Manage Users)
+          Admin --> (View Audit Logs)
+          Admin --> (Generate Reports)
+          Admin --> (Reconcile Inventory)
+          ExternalSystem --> (Import Inventory)
+          ExternalSystem --> (Export Inventory)
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Import Inventory (CSV / External)</caption>
+        <table>
+          <tr><th>Actor</th><td>External System / Admin</td></tr>
+          <tr><th>Preconditions</th><td>CSV file or API payload available; mapping rules defined</td></tr>
+          <tr><th>Main Flow</th><td>Admin uploads CSV → system validates rows → for each row map to product DTO → create/update product & inventory transactions → return summary of success/failure.</td></tr>
+          <tr><th>Alternate Flows</th><td>Row validation errors → collect and return errors; partial success allowed with transaction boundaries if required.</td></tr>
+          <tr><th>Postconditions</th><td>Products created/updated, transactions recorded, audit logs appended.</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <caption class="small"><span class="badge">Use case</span> Generate Reports</caption>
+        <table>
+          <tr><th>Actor</th><td>Admin</td></tr>
+          <tr><th>Preconditions</th><td>Data available; report templates configured</td></tr>
+          <tr><th>Main Flow</th><td>Admin requests report (e.g., low stock, movements by date) → system queries repositories → aggregates data → returns CSV/JSON/PDF.</td></tr>
+          <tr><th>Alternate Flows</th><td>Large queries — asynchronous job + notification when done.</td></tr>
+          <tr><th>Postconditions</th><td>Report generated and delivered or queued.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cross-cutting / Non-functional Use Cases</h2>
+    <div class="grid">
+      <div class="diagram">
+        <div class="mermaid">
+          %% cross-cutting concerns (observability, auditing, error handling)
+          flowchart TB
+            A[API Request] --> B{Auth Check}
+            B -->|ok| C[Business Use Case]
+            B -->|fail| D[401 Unauthorized]
+            C --> E[Repository]
+            E --> F[DB]
+            C --> G[Emit domain event / audit log]
+            G --> H[Event bus or events table]
+        </div>
+      </div>
+
+      <div>
+        <table>
+          <caption class="small">Cross-cutting Concerns</caption>
+          <tr><th>Concern</th><th>Description</th></tr>
+          <tr><td>Authentication & Authorization</td><td>JWT access tokens + refresh tokens; RBAC via roles table or claims.</td></tr>
+          <tr><td>Validation</td><td>DTO validation at API boundary (Pydantic) before mapping to domain.</td></tr>
+          <tr><td>Auditing</td><td>Record create/update/delete actions with user_id and timestamp in audit_logs.</td></tr>
+          <tr><td>Observability</td><td>Structured logs, metrics, distributed tracing for cross-service calls.</td></tr>
+          <tr><td>Error Handling</td><td>Return proper HTTP codes; map domain errors to user-friendly messages.</td></tr>
+          <tr><td>Transactions</td><td>Use DB transactions for inventory updates + transaction persistence to ensure consistency.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Complete Use Case Index (Alphabetical)</h2>
+    <p class="small">Below is a quick index of all documented use cases in this file — match these to the detailed tables above.</p>
+    <table>
+      <tr><th>Use Case</th><th>Actors</th><th>Notes</th></tr>
+      <tr><td>Adjust Inventory</td><td>User, Admin</td><td>Manual correction with reason; audit required</td></tr>
+      <tr><td>Create Product</td><td>User</td><td>Basic product CRUD</td></tr>
+      <tr><td>Delete Product</td><td>User</td><td>Soft delete recommended</td></tr>
+      <tr><td>Export Inventory</td><td>User, Admin</td><td>CSV/JSON export</td></tr>
+      <tr><td>Generate Reports</td><td>Admin</td><td>Sync or async</td></tr>
+      <tr><td>Import Inventory</td><td>Admin, ExternalSystem</td><td>CSV mapping & validation</td></tr>
+      <tr><td>List Products</td><td>User</td><td>Pagination & filters</td></tr>
+      <tr><td>Login / Logout / Refresh</td><td>Guest, User</td><td>Token-based auth (JWT)</td></tr>
+      <tr><td>Manage Users</td><td>Admin</td><td>Create, assign roles, deactivate</td></tr>
+      <tr><td>Record Inventory In/Out</td><td>User</td><td>Transactional updates & events</td></tr>
+      <tr><td>Register Account</td><td>Guest</td><td>Optional email verification</td></tr>
+      <tr><td>Search / Filter / Sort</td><td>User</td><td>Text search, sku, category, price range</td></tr>
+      <tr><td>Upload Product Image</td><td>User</td><td>URL or file upload</td></tr>
+      <tr><td>View Dashboard</td><td>User</td><td>KPIs, low stock alerts</td></tr>
+      <tr><td>View Inventory History</td><td>User</td><td>Paginated transactions</td></tr>
+      <tr><td>View Audit Logs</td><td>Admin</td><td>Compliance</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    <p class="small">Notes: This documentation intentionally focuses on use-case definitions and flows — ideal to pair with a domain model (entities) and persistence schema (MySQL DDL). For the repository pattern, each use case should call an application-level service which uses repository interfaces (ports) implemented by adapters that talk to the DB. If you want, I can also generate PlantUML PNGs, a printable PDF, or convert each use case to Gherkin scenarios for tests.</p>
+  </footer>
+</body>
+</html>
