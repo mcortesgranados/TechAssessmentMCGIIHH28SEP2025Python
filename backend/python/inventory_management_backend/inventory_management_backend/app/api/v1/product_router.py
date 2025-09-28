@@ -223,14 +223,21 @@ async def test_endpoint_performance():
 📅 Date: 2025-09-28
 """
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from typing import List
 from app.application.dto.product_dto import ProductDTO
-from app.application.dto.product_create_dto import  ProductCreateDTO
+from app.application.dto.product_create_dto import ProductCreateDTO
 from app.application.dto.product_update_dto import ProductUpdateDTO
 from app.application.services.product_application_service import ProductApplicationService
+from app.api.dependencies import get_current_user  # JWT dependency
 
-router = APIRouter(prefix="/products", tags=["products"])
+# 👇 Aplica la protección JWT a TODOS los endpoints del router
+router = APIRouter(
+    prefix="/products",
+    tags=["products"],
+    dependencies=[Depends(get_current_user)],  # <--- Protege globalmente
+)
+
 
 def get_product_application_service():
     """
