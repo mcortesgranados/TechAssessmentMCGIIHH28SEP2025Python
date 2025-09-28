@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Technical Test: Inventory Management System</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+    .container { max-width: 950px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+    h1 { color: #1565c0; }
+    h2 { color: #2e7d32; margin-top: 32px; }
+    h3 { color: #7b1fa2; margin-top: 24px; }
+    ul, li { margin-bottom: 8px; }
+    code, pre { background: #f3f3f7; padding: 3px 7px; border-radius: 4px; font-size: 1em; color: #222; }
+    .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+    .important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+    .footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+    @media (max-width: 600px) { .container { padding: 16px 8px; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Technical Test: Inventory Management System</h1>
+    <p><strong>Solution provided by : Manuela Cortés Granados</strong></p>
+    <p>&nbsp;</p>
+    <div class="note">
+      This technical test is designed to evaluate your full-stack development skills, your understanding of software architecture, and your ability to build a robust, production-ready application.<br>
+      <b>Your task:</b> Develop a comprehensive inventory management system.
+    </div>
+
+    <h2>🌟 The Challenge</h2>
+    <ul>
+      <li>Create a full-stack application that provides users with a secure platform to manage product inventory.</li>
+      <li>The system must support user authentication and provide a complete set of features for managing assets in a store or warehouse.</li>
+    </ul>
+
+    <h2>🏛️ System Architecture</h2>
+    <div class="important">
+      Your solution should be composed of distinct and well-defined layers to demonstrate a clear separation of concerns.<br>
+      The system consists of a <b>backend API</b> and a <b>frontend user interface</b>.
+    </div>
+
+    <h3>1. Backend (API)</h3>
+    <ul>
+      <li><b>Technology Stack:</b>
+        <ul>
+          <li>Language: Python</li>
+          <li>Framework: FastAPI</li>
+          <li>Database: A SQL database (e.g., SQLite, PostgreSQL)</li>
+        </ul>
+      </li>
+      <li><b>Key Functionality:</b>
+        <ul>
+          <li>User Authentication: Implement a user management system with secure authentication. A token-based approach (e.g., JWT) is recommended.</li>
+          <li>Product Management (CRUD): Develop RESTful API endpoints for:
+            <ul>
+              <li>Create: Add a new product to inventory.</li>
+              <li>Retrieve: List all products or fetch one by its unique identifier.</li>
+              <li>Update: Modify product details.</li>
+              <li>Delete: Remove a product from inventory.</li>
+            </ul>
+          </li>
+          <li>Data Models: User and Product. Each Product must have a unique ID, name, description, price, and quantity.</li>
+          <li>Repository Pattern: Abstract the data access layer. Service/business logic must interact with repositories, ensuring separation from the underlying database technology.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>2. Frontend (User Interface)</h3>
+    <ul>
+      <li><b>Technology Stack:</b> Use what best showcases your skills:
+        <ul>
+          <li>A modern JavaScript framework (e.g., React, Vue, Svelte)</li>
+          <li>Or plain HTML, CSS, and JavaScript</li>
+        </ul>
+      </li>
+      <li><b>Key Functionality:</b>
+        <ul>
+          <li>Login/Logout: User-friendly authentication interface.</li>
+          <li>Inventory Dashboard: Responsive dashboard displaying all products and details.</li>
+          <li>CRUD Interface: Intuitive forms and controls for creating, viewing, updating, and deleting products.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>💡 Optional Enhancements</h2>
+
+    <ul>
+      <li>Design System: Apply a professional and consistent UI design. (Tailwind CSS or a custom system encouraged)</li>
+      <li>Asset Management: Support for including an image URL for each product.</li>
+      <li>Advanced Features: Implement search, filtering, or sorting for product lists.</li>
+      <li>State Management: If using a frontend framework, show clear and efficient state management.</li>
+      <li>Unit & Integration Testing: Automated tests for FastAPI endpoints and data repositories to ensure reliability.</li>
+    </ul>
+
+    <h2>🏅 Evaluation Criteria</h2>
+    <ul>
+      <li><b>Architectural Design (40%)</b>: Clarity and effectiveness of repository pattern and separation of concerns.</li>
+      <li><b>Functionality (30%)</b>: Completeness and correctness of required features (CRUD, authentication).</li>
+      <li><b>Code Quality (20%)</b>: Readability, maintainability, best practices (PEP 8), documentation, and tests.</li>
+      <li><b>User Experience (10%)</b>: Creativity, usability, and visual appeal of the frontend.</li>
+    </ul>
+    
+        <p>&nbsp;</p>
+        <h2>🏅 Deliverables provided by Manuela Cortés Granados</h2>
+        <ul>
+      <li><b><a href="backend_folder_structure.html">Backend Folder Structure</a></b>: Description</li>
+      <li><b>Functionality (30%)</b>: Completeness and correctness of required features (CRUD, authentication).</li>
+      <li><b>Code Quality (20%)</b>: Readability, maintainability, best practices (PEP 8), documentation, and tests.</li>
+      <li><b>User Experience (10%)</b>: Creativity, usability, and visual appeal of the frontend.</li>
+    </ul>
+
+
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <div class="footer">
+      <p>Good luck! We look forward to reviewing your solution.<br>
+  &copy; 2025 Inventory Management System Technical Test </p>
+    </div>
+  </div>
+</body>
+</html>

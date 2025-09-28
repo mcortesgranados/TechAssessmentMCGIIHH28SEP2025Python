@@ -1,0 +1,66 @@
+📁 inventory_management_backend/
+├── 📁 app/
+Main application package
+│ ├── 📁 domain/
+Business entities and pure domain logic
+│ │ ├── 📁 models/
+Domain entities
+│ │ │ ├── 📄 user.py
+│ │ │ └── 📄 product.py
+│ │ └── 📁 services/
+│ │ └── 📄 inventory_service.py
+│ ├── 📁 application/
+Use cases, DTOs, orchestrators, event handlers
+│ │ ├── 📁 use_cases/
+Business operations
+│ │ │ ├── 📁 product/
+│ │ │ │ ├── 📄 create_product.py
+│ │ │ │ ├── 📄 get_product.py
+│ │ │ │ ├── 📄 update_product.py
+│ │ │ │ └── 📄 delete_product.py
+│ │ │ └── 📁 user/
+│ │ │ ├── 📄 register_user.py
+│ │ │ └── 📄 login_user.py
+│ │ ├── 📁 dto/
+DTOs for requests/responses
+│ │ │ ├── 📄 product_dto.py
+│ │ │ └── 📄 user_dto.py
+│ │ └── 📁 event_handlers/
+│ │ └── 📄 inventory_events.py
+│ ├── 📁 ports/
+Abstract interfaces for repositories, auth, event bus
+│ │ ├── 📄 product_repository.py
+│ │ ├── 📄 user_repository.py
+│ │ └── 📄 event_bus.py
+│ ├── 📁 adapters/
+Infrastructure implementations (DB, auth, events)
+│ │ ├── 📁 repositories/
+│ │ │ ├── 📄 product_repository_impl.py
+│ │ │ └── 📄 user_repository_impl.py
+│ │ ├── 📁 db/
+│ │ │ ├── 📄 base.py
+│ │ │ └── 📄 session.py
+│ │ ├── 📁 auth/
+│ │ │ └── 📄 jwt_manager.py
+│ │ └── 📁 events/
+│ │ └── 📄 event_publisher.py
+│ ├── 📁 api/
+FastAPI routers/controllers
+│ │ ├── 📁 v1/
+│ │ │ ├── 📄 product_router.py
+│ │ │ └── 📄 user_router.py
+│ │ └── 📄 dependencies.py
+│ ├── 📁 config/
+│ │ └── 📄 settings.py
+│ ├── 📄 main.py
+│ └── 📄 events.py
+├── 📁 tests/
+Unit & integration tests
+│ ├── 📄 domain/
+│ ├── 📄 application/
+│ ├── 📄 adapters/
+│ ├── 📄 api/
+│ └── 📄 conftest.py
+├── 📄 requirements.txt
+├── 📄 README.md
+└── 📁 alembic/

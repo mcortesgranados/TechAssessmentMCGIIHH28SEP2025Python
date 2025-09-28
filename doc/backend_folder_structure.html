@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Management System - Robust Backend Folder Structure</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+    .container { max-width: 1700px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+    h1 { color: #1565c0; }
+    h2 { color: #2e7d32; margin-top: 32px; }
+    h3 { color: #7b1fa2; margin-top: 24px; }
+    ul, li { margin-bottom: 8px; }
+    code, pre { background: #f3f3f7; padding: 3px 7px; border-radius: 4px; font-size: 1em; color: #222; }
+    .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+    .footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+    .hierarchy-columns { display: flex; }
+    .hierarchy { flex: 2; background: #fafbfc; padding: 18px 12px; border-radius: 8px; border-right: 2px solid #cfd8dc;}
+    .columns { flex: 4; display: flex; gap: 0px; }
+    .column { flex: 1; background: #fafbfc; padding: 18px 14px; border-radius: 8px; border-left: 2px solid #cfd8dc; }
+    .element { font-weight: bold; color: #1976d2; }
+    .subelement { margin-left: 24px; color: #333; font-size: 1em; }
+    .desc { font-size: 0.96em; margin-left: 48px; margin-bottom: 10px; color: #555;}
+    .explain { font-size: 0.93em; margin-bottom: 12px; background: #f3f3f7; padding: 8px 8px 6px 8px; border-radius: 5px;}
+    .header-emoji { font-size: 1.4em; }
+    .folder-emoji { font-size: 1.2em; }
+    .file-emoji { font-size: 1.2em; margin-right: 4px;}
+    .line { height: 2px; background: #cfd8dc; margin: 0 0 10px 0;}
+    @media (max-width: 950px) {
+      .hierarchy-columns { flex-direction: column; }
+      .container { padding: 10px 2px; }
+      .columns { flex-direction: column; }
+      .hierarchy, .column { border: none; }
+      .line { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Inventory Management System - Robust Backend Folder Structure</h1>
+    <div class="note">
+      <b>📚 Hierarchy of Folders & Files on the Left.<br>
+      💡 Architectural Purpose in <span style="color:#1565c0;">Hexagonal</span>, <span style="color:#2e7d32;">Microservices</span>, and <span style="color:#7b1fa2;">Event Driven</span> Columns on the Right.</b>
+    </div>
+    <div class="hierarchy-columns">
+      <!-- Hierarchy Column -->
+      <div class="hierarchy">
+        <h2>Hierarchy Structure</h2>
+        <div class="element folder-emoji">📁 inventory_management_backend/</div>
+        <div class="subelement folder-emoji">├── 📁 app/</div>
+          <div class="desc">Main application package</div>
+          <div class="subelement folder-emoji">│   ├── 📁 domain/</div>
+            <div class="desc">Business entities and pure domain logic</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 models/</div>
+              <div class="desc">Domain entities</div>
+              <div class="subelement file-emoji">│   │   │   ├── 📄 user.py</div>
+              <div class="subelement file-emoji">│   │   │   └── 📄 product.py</div>
+            <div class="subelement folder-emoji">│   │   └── 📁 services/</div>
+              <div class="subelement file-emoji">│   │       └── 📄 inventory_service.py</div>
+          <div class="subelement folder-emoji">│   ├── 📁 application/</div>
+            <div class="desc">Use cases, DTOs, orchestrators, event handlers</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 use_cases/</div>
+              <div class="desc">Business operations</div>
+              <div class="subelement folder-emoji">│   │   │   ├── 📁 product/</div>
+                <div class="subelement file-emoji">│   │   │   │   ├── 📄 create_product.py</div>
+                <div class="subelement file-emoji">│   │   │   │   ├── 📄 get_product.py</div>
+                <div class="subelement file-emoji">│   │   │   │   ├── 📄 update_product.py</div>
+                <div class="subelement file-emoji">│   │   │   │   └── 📄 delete_product.py</div>
+              <div class="subelement folder-emoji">│   │   │   └── 📁 user/</div>
+                <div class="subelement file-emoji">│   │   │       ├── 📄 register_user.py</div>
+                <div class="subelement file-emoji">│   │   │       └── 📄 login_user.py</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 dto/</div>
+              <div class="desc">DTOs for requests/responses</div>
+              <div class="subelement file-emoji">│   │   │   ├── 📄 product_dto.py</div>
+              <div class="subelement file-emoji">│   │   │   └── 📄 user_dto.py</div>
+            <div class="subelement folder-emoji">│   │   └── 📁 event_handlers/</div>
+              <div class="subelement file-emoji">│   │       └── 📄 inventory_events.py</div>
+          <div class="subelement folder-emoji">│   ├── 📁 ports/</div>
+            <div class="desc">Abstract interfaces for repositories, auth, event bus</div>
+            <div class="subelement file-emoji">│   │   ├── 📄 product_repository.py</div>
+            <div class="subelement file-emoji">│   │   ├── 📄 user_repository.py</div>
+            <div class="subelement file-emoji">│   │   └── 📄 event_bus.py</div>
+          <div class="subelement folder-emoji">│   ├── 📁 adapters/</div>
+            <div class="desc">Infrastructure implementations (DB, auth, events)</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 repositories/</div>
+              <div class="subelement file-emoji">│   │   │   ├── 📄 product_repository_impl.py</div>
+              <div class="subelement file-emoji">│   │   │   └── 📄 user_repository_impl.py</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 db/</div>
+              <div class="subelement file-emoji">│   │   │   ├── 📄 base.py</div>
+              <div class="subelement file-emoji">│   │   │   └── 📄 session.py</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 auth/</div>
+              <div class="subelement file-emoji">│   │   │   └── 📄 jwt_manager.py</div>
+            <div class="subelement folder-emoji">│   │   └── 📁 events/</div>
+              <div class="subelement file-emoji">│   │       └── 📄 event_publisher.py</div>
+          <div class="subelement folder-emoji">│   ├── 📁 api/</div>
+            <div class="desc">FastAPI routers/controllers</div>
+            <div class="subelement folder-emoji">│   │   ├── 📁 v1/</div>
+              <div class="subelement file-emoji">│   │   │   ├── 📄 product_router.py</div>
+              <div class="subelement file-emoji">│   │   │   └── 📄 user_router.py</div>
+            <div class="subelement file-emoji">│   │   └── 📄 dependencies.py</div>
+          <div class="subelement folder-emoji">│   ├── 📁 config/</div>
+            <div class="subelement file-emoji">│   │   └── 📄 settings.py</div>
+          <div class="subelement file-emoji">│   ├── 📄 main.py</div>
+          <div class="subelement file-emoji">│   └── 📄 events.py</div>
+        <div class="subelement folder-emoji">├── 📁 tests/</div>
+          <div class="desc">Unit & integration tests</div>
+          <div class="subelement file-emoji">│   ├── 📄 domain/</div>
+          <div class="subelement file-emoji">│   ├── 📄 application/</div>
+          <div class="subelement file-emoji">│   ├── 📄 adapters/</div>
+          <div class="subelement file-emoji">│   ├── 📄 api/</div>
+          <div class="subelement file-emoji">│   └── 📄 conftest.py</div>
+        <div class="subelement file-emoji">├── 📄 requirements.txt</div>
+        <div class="subelement file-emoji">├── 📄 README.md</div>
+        <div class="subelement folder-emoji">└── 📁 alembic/</div>
+          <div class="desc">DB migrations</div>
+      </div>
+      <!-- Columns -->
+      <div class="columns">
+        <!-- Hexagonal Column -->
+        <div class="column">
+          <h3 class="header-emoji">🛡️ Hexagonal</h3>
+          <div class="line"></div>
+          <div class="explain"><b>📁 domain/</b> <br>Defines pure business logic and entities, independent of frameworks/infrastructure. <b>Purpose:</b> Isolate and reuse core logic.</div>
+          <div class="explain"><b>📁 application/</b><br>Orchestrates domain logic, use cases, DTOs, and event handlers. <b>Purpose:</b> Implements business workflows.</div>
+          <div class="explain"><b>📁 ports/</b><br>Abstract interfaces for repositories, auth, event bus. <b>Purpose:</b> Decouples business logic from infrastructure.</div>
+          <div class="explain"><b>📁 adapters/</b><br>Infrastructure implementations—repositories, DB, auth, event publisher. <b>Purpose:</b> Bridges core to external systems.</div>
+          <div class="explain"><b>📁 api/</b><br>FastAPI routers/controllers as entry points. <b>Purpose:</b> Adapts HTTP requests to business logic.</div>
+          <div class="explain"><b>📁 config/</b><br>App configuration, secrets, DB settings. <b>Purpose:</b> Technical details kept out of core logic.</div>
+          <div class="explain"><b>📄 main.py</b><br>App entry point, wires dependencies. <b>Purpose:</b> Bootstraps hexagonal application.</div>
+        </div>
+        <!-- Microservices Column -->
+        <div class="column">
+          <h3 class="header-emoji">🪐 Microservices</h3>
+          <div class="line"></div>
+          <div class="explain"><b>📁 app/</b><br>Microservice boundary (can split into submodules/services). <b>Purpose:</b> Enables independent deployment and scaling.</div>
+          <div class="explain"><b>📄 main.py</b><br>Microservice entry point. <b>Purpose:</b> Run services independently.</div>
+          <div class="explain"><b>📁 config/</b><br>Service-specific configuration. <b>Purpose:</b> Environment setup per microservice.</div>
+          <div class="explain"><b>📁 adapters/events/</b><br>Messaging adapters for each service. <b>Purpose:</b> Enables async communication between microservices.</div>
+          <div class="explain"><b>📁 tests/</b><br>Service/module-level tests. <b>Purpose:</b> Reliability and separation of concerns.</div>
+          <div class="explain"><b>📁 alembic/</b><br>Service-specific DB migrations. <b>Purpose:</b> Schema evolution per microservice.</div>
+        </div>
+        <!-- Event Driven Column -->
+        <div class="column">
+          <h3 class="header-emoji">⚡ Event Driven</h3>
+          <div class="line"></div>
+          <div class="explain"><b>📁 application/event_handlers/</b><br>Handles events and triggers workflows. <b>Purpose:</b> Responds to system changes asynchronously.</div>
+          <div class="explain"><b>📁 adapters/events/</b><br>Event publisher for domain/integration events. <b>Purpose:</b> Publishes events to brokers.</div>
+          <div class="explain"><b>📄 events.py</b><br>Centralized event definitions. <b>Purpose:</b> Maintains event registry.</div>
+          <div class="explain"><b>📄 application/dto/*_dto.py</b><br>Event payload DTOs. <b>Purpose:</b> Ensures structured event data.</div>
+          <div class="explain"><b>📁 ports/event_bus.py</b><br>Event bus interface. <b>Purpose:</b> Decouples event logic from messaging technology.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      &copy; 2025 Inventory Management System — Robust Backend Structure
+    </div>
+  </div>
+</body>
+</html>
