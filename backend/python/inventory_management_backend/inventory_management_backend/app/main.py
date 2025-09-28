@@ -338,10 +338,12 @@ app.add_middleware(
 # Import your routers
 from app.api.v1.product_router import router as product_router
 from app.api.v1.auth_router import router as auth_router
+from app.api.v1.user_router import router as user_router
 
 # Include your router so /products endpoints show up in /docs
 app.include_router(product_router)
 app.include_router(auth_router)
+app.include_router(user_router)
 
 @app.get("/")
 def read_root():
