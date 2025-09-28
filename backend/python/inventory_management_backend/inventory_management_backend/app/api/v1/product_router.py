@@ -223,26 +223,36 @@ async def test_endpoint_performance():
 📅 Date: 2025-09-28
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from typing import List
 from app.application.dto.product_dto import ProductDTO
-from app.adapters.repositories.product_repository_impl import ProductRepositoryImpl
+from app.application.dto.product_create_dto import  ProductCreateDTO
+from app.application.services.product_application_service import ProductApplicationService
 
 router = APIRouter(prefix="/products", tags=["products"])
 
-def get_product_repository():
+def get_product_application_service():
     """
-    🏭 Dependency provider for ProductRepositoryImpl.
+    🏭 Dependency provider for ProductApplicationService.
     """
-    return ProductRepositoryImpl()
+    return ProductApplicationService()
 
 @router.get("/", response_model=List[ProductDTO])
-def list_products(repo: ProductRepositoryImpl = Depends(get_product_repository)):
+def list_products(service: ProductApplicationService = Depends(get_product_application_service)):
     """
     📦 List all products.
-
-    Returns:
-        List[ProductDTO]: Product data transfer objects for all products.
     """
-    products = repo.get_all_products()
+    products = service.list_products()
     return [ProductDTO.from_model(prod) for prod in products]
+
+@router.post("/", response_model=ProductDTO, status_code=status.HTTP_201_CREATED)
+def create_product(
+    product: ProductCreateDTO,
+    service: ProductApplicationService = Depends(get_product_application_service)
+):
+    """
+    🆕 Create a new product using the application service,
+    which internally uses domain and infrastructure services.
+    """
+    created_product = service.create_product(product.model_dump())
+    return ProductDTO.from_model(created_product)
