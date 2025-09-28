@@ -85,6 +85,7 @@ def create_structure(base_path, structure):
 
 if __name__ == "__main__":
     # Go to parent of the parent directory
-    parent_of_parent = os.path.abspath(os.path.join(os.getcwd(), "../"))
-    create_structure(parent_of_parent, structure)
-    print(f"✅ Project created successfully in: {os.path.join(parent_of_parent, 'inventory_management_backend')}")
+    #parent_of_parent = os.path.abspath(os.path.join(os.getcwd(), "../"))
+    #create_structure(parent_of_parent, structure)
+    #print(f"✅ Project created successfully in: {os.path.join(parent_of_parent, 'inventory_management_backend')}")
+    print(f"✅ Not enabled to create project structure.")
