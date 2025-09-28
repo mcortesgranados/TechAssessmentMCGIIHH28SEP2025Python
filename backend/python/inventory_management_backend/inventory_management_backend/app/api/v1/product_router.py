@@ -227,6 +227,7 @@ from fastapi import APIRouter, Depends, status
 from typing import List
 from app.application.dto.product_dto import ProductDTO
 from app.application.dto.product_create_dto import  ProductCreateDTO
+from app.application.dto.product_update_dto import ProductUpdateDTO
 from app.application.services.product_application_service import ProductApplicationService
 
 router = APIRouter(prefix="/products", tags=["products"])
@@ -256,3 +257,15 @@ def create_product(
     """
     created_product = service.create_product(product.model_dump())
     return ProductDTO.from_model(created_product)
+
+@router.put("/{product_id}", response_model=ProductDTO)
+def update_product(
+    product_id: int,
+    update_dto: ProductUpdateDTO,
+    service: ProductApplicationService = Depends(get_product_application_service)
+):
+    updated_product = service.update_product(product_id, update_dto)
+    if not updated_product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return ProductDTO.from_model(updated_product)
+
