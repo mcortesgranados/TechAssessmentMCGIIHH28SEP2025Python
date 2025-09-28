@@ -161,3 +161,25 @@ class Product(Base):
     stock = Column(Integer, default=0)
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
+
+class User(Base):
+    """
+    🏷️ SQLAlchemy User Entity
+
+    Represents a user record in the system.
+
+    Attributes:
+        id (BigInteger): Primary key, auto-incremented.
+        username (String): Unique username.
+        email (String): Unique email address.
+        password_hash (String): Hashed password.
+        created_at (TIMESTAMP): Creation timestamp.
+        updated_at (TIMESTAMP): Update timestamp.
+    """
+    __tablename__ = "users"
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    username = Column(String(100), unique=True, nullable=False)
+    email = Column(String(150), unique=True, nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    created_at = Column(TIMESTAMP, server_default=func.now())
+    updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())    
