@@ -22,5 +22,11 @@ class ProductApplicationService:
         update_data = update_dto.dict(exclude_unset=True)  # Only include provided fields
         product = self.repository.update_product(product_id, update_data)
         # Validate service domain
-
+        if self.domain_service.is_sellable(product):
+            # Publish event with infrastructure service
+            self.event_service.publish_product_updated(product)
         return product    
+    
+    def delete_product(self, product_id: int) -> bool:
+        deleted = self.repository.delete_product(product_id)
+        return deleted    
