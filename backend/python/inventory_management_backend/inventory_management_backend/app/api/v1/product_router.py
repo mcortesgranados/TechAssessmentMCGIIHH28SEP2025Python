@@ -269,3 +269,13 @@ def update_product(
         raise HTTPException(status_code=404, detail="Product not found")
     return ProductDTO.from_model(updated_product)
 
+@router.delete("/{product_id}", status_code=204)
+def delete_product(
+    product_id: int,
+    service: ProductApplicationService = Depends(get_product_application_service)
+):
+    deleted = service.delete_product(product_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Product not found")
+    # No content to return
+
