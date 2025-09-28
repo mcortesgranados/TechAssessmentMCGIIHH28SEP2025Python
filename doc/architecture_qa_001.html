@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Types of Services in Hexagonal/Clean Architecture</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fafbfc;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 32px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    h1 {
+      color: #2b6cb0;
+      font-size: 1.7em;
+      margin-bottom: 0.2em;
+    }
+    h2 {
+      color: #48bb78;
+      font-size: 1.2em;
+      margin-top: 1.3em;
+      margin-bottom: 0.4em;
+    }
+    ul {
+      margin-left: 1.5em;
+    }
+    .emoji {
+      font-size: 1.1em;
+      margin-right: 5px;
+    }
+    .tip {
+      background: #ebf8ff;
+      border-left: 4px solid #4299e1;
+      padding: 8px 15px;
+      margin: 20px 0;
+      border-radius: 6px;
+      color: #2c5282;
+    }
+    .example {
+      background: #f7fafc;
+      border-left: 4px solid #48bb78;
+      padding: 8px 15px;
+      margin: 20px 0;
+      border-radius: 6px;
+      color: #22543d;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 0.98em;
+    }
+    .highlight {
+      color: #d69e2e;
+      font-weight: bold;
+    }
+    .section {
+      margin-top: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Types of Services in Hexagonal/Clean Architecture</h1>
+    <div class="section">
+      <span class="emoji">🔎</span>
+      <span class="highlight">Why do all three exist?</span>
+      <p>
+        Each type serves a distinct and necessary function in medium/large systems or when you want high maintainability and scalability:
+      </p>
+      <ul>
+        <li>
+          <strong>Domain Services</strong> <code>domain/services/</code><br>
+          Encapsulate pure business logic.<br>
+          Do not depend on any technical details (no database, frameworks, or external APIs).
+        </li>
+        <li>
+          <strong>Application Services</strong> <code>application/services/</code><br>
+          Orchestrate processes/use cases.<br>
+          Decide the flow, validate, coordinate entities, repositories, and events.<br>
+          Handle application business rules, but <u>not</u> pure domain rules.
+        </li>
+        <li>
+          <strong>Infrastructure Services</strong> <code>adapters/services/</code> or <code>adapters/events/</code><br>
+          Implement technical details: database access, email sending, integration with external APIs, event publishing, etc.<br>
+          Are the adapters for the interfaces (ports) defined by your domain/application.
+        </li>
+      </ul>
+    </div>
+    
+    <div class="section">
+      <span class="emoji">🧩</span>
+      <span class="highlight">When do you use each?</span>
+      <ul>
+        <li>If your logic is universal and model-specific &rarr; <strong>Domain</strong></li>
+        <li>If you need to orchestrate several steps, validate, transform, or apply application business logic &rarr; <strong>Application</strong></li>
+        <li>If the logic depends on technology or integration &rarr; <strong>Infrastructure</strong></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <span class="emoji">📝</span>
+      <span class="highlight">Practical Example</span>
+      <div class="example">
+        Suppose you want to create a product:<br><br>
+        <strong>The API (router/controller)</strong> calls the <strong>application service</strong>.<br>
+        The <strong>application service</strong> validates, applies rules, orchestrates the process, and calls:<br>
+        &nbsp;&nbsp;&bull; <strong>Domain services</strong> for pure business logic.<br>
+        &nbsp;&nbsp;&bull; <strong>Repositories and infrastructure services</strong> to save to DB, send events, etc.
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="emoji">💡</span>
+      <span class="highlight">Why is this useful?</span>
+      <div class="tip">
+        You keep each layer independent, easy to test and evolve.<br>
+        You can change the infrastructure without altering the domain or application.<br>
+        The domain stays clean and focused, the application flexible, and the infrastructure decoupled.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
