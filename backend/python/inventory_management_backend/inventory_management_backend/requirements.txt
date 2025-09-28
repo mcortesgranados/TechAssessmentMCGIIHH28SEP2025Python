@@ -1,1 +1,6 @@
 # requirements.txt
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+alembic
