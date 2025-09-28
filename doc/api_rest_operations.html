@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Management System - REST API Documentation</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+    .container { max-width: 1700px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+    h1 { color: #1565c0; }
+    h2 { color: #2e7d32; margin-top: 32px; }
+    h3 { color: #7b1fa2; margin-top: 24px; }
+    ul, li { margin-bottom: 8px; }
+    code, pre { background: #f3f3f7; padding: 3px 7px; border-radius: 4px; font-size: 1em; color: #222; }
+    .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+    .footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+    .hierarchy-columns { display: flex; }
+    .hierarchy { flex: 2; background: #fafbfc; padding: 18px 12px; border-radius: 8px; border-right: 2px solid #cfd8dc;}
+    .columns { flex: 4; display: flex; gap: 0px; }
+    .column { flex: 1; background: #fafbfc; padding: 18px 14px; border-radius: 8px; border-left: 2px solid #cfd8dc; }
+    .element { font-weight: bold; color: #1976d2; }
+    .subelement { margin-left: 24px; color: #333; font-size: 1em; }
+    .desc { font-size: 0.96em; margin-left: 48px; margin-bottom: 10px; color: #555;}
+    .explain { font-size: 0.93em; margin-bottom: 12px; background: #f3f3f7; padding: 8px 8px 6px 8px; border-radius: 5px;}
+    .header-emoji { font-size: 1.4em; }
+    .folder-emoji { font-size: 1.2em; }
+    .file-emoji { font-size: 1.2em; margin-right: 4px;}
+    .line { height: 2px; background: #cfd8dc; margin: 0 0 10px 0;}
+    @media (max-width: 950px) {
+      .hierarchy-columns { flex-direction: column; }
+      .container { padding: 10px 2px; }
+      .columns { flex-direction: column; }
+      .hierarchy, .column { border: none; }
+      .line { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📘 Inventory Management System - REST API Documentation</h1>
+    <p>This document lists all possible REST API endpoints required for the technical test, covering authentication, user management, and product inventory operations.</p>
+
+    <h2>🔐 Authentication Endpoints</h2>
+    <ul>
+      <li><code>POST /auth/register</code> – Register a new user.</li>
+      <li><code>POST /auth/login</code> – Authenticate user, return JWT token.</li>
+      <li><code>POST /auth/logout</code> – Invalidate current session (optional if using stateless JWT).</li>
+      <li><code>GET /auth/me</code> – Get current authenticated user details.</li>
+    </ul>
+
+    <h2>👥 User Management Endpoints</h2>
+    <ul>
+      <li><code>GET /users</code> – List all users (admin-only).</li>
+      <li><code>GET /users/{id}</code> – Retrieve details of a specific user.</li>
+      <li><code>PUT /users/{id}</code> – Update user information (e.g., password, role).</li>
+      <li><code>DELETE /users/{id}</code> – Remove a user (admin-only).</li>
+    </ul>
+
+    <h2>📦 Product Management Endpoints</h2>
+    <ul>
+      <li><code>POST /products</code> – Create a new product (name, description, price, quantity, optional image URL).</li>
+      <li><code>GET /products</code> – Retrieve a list of all products.</li>
+      <li><code>GET /products/{id}</code> – Get details of a specific product by ID.</li>
+      <li><code>PUT /products/{id}</code> – Update an existing product’s details.</li>
+      <li><code>DELETE /products/{id}</code> – Delete a product from the inventory.</li>
+    </ul>
+
+    <h2>🔍 Advanced Product Features (Optional)</h2>
+    <ul>
+      <li><code>GET /products/search?q=keyword</code> – Search products by name or description.</li>
+      <li><code>GET /products/filter?min_price=&max_price=&category=</code> – Filter products by attributes.</li>
+      <li><code>GET /products/sort?by=price&order=asc</code> – Sort products (by price, name, quantity).</li>
+      <li><code>POST /products/{id}/upload-image</code> – Upload or update product image.</li>
+    </ul>
+
+    <h2>📊 Inventory Enhancements (Optional)</h2>
+    <ul>
+      <li><code>GET /products/low-stock</code> – List products with quantity below threshold.</li>
+      <li><code>PATCH /products/{id}/adjust-quantity</code> – Increase or decrease stock quantity.</li>
+      <li><code>GET /products/stats</code> – Summary statistics (e.g., total products, inventory value).</li>
+    </ul>
+
+    <div class="note">
+      <p>All endpoints should require authentication via <code>Authorization: Bearer &lt;JWT&gt;</code> header, except <code>/auth/register</code> and <code>/auth/login</code>.</p>
+    </div>
+
+    <div class="footer">
+      Inventory Management System – REST API Documentation • Generated for Technical Test
+    </div>
+  </div>
+</body>
+</html>
