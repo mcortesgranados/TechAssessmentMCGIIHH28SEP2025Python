@@ -9,6 +9,14 @@ class ProductApplicationService:
         self.domain_service = domain_service or ProductDomainService()
         self.event_service = event_service or ProductEventService()
 
+    def list_products(self):
+        """
+        Retrieve all products from the repository.
+        """
+        products = self.repository.get_all_products()
+        return products
+
+
     def create_product(self, product_data: dict):  # <-- product_data debe ser dict
         # Create from repository
         product = self.repository.create_product(product_data)
