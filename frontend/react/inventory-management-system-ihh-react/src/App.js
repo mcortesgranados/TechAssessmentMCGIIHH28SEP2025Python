@@ -4,7 +4,7 @@ import LoginPage from './pages/LoginPage';
 import ProductList from './pages/ProductList'; // <-- import ProductList
 import ProductEdit from './pages/ProductEdit'; // <-- import ProductList
 import AuthenticatedPage from './pages/AuthenticatedPage';
-
+import ProductCreate from './pages/ProductCreate';
 
 function Home() {
   return (
@@ -53,6 +53,7 @@ function App() {
             <Route path="/authenticated" element={<AuthenticatedPage token={token} />} />
             <Route path="/products" element={<ProductList token={token} />} />
             <Route path="/products/edit/:id" element={<ProductEdit />} />
+            <Route path="/products/create" element={<ProductCreate />} />
           </Routes>
         </header>
       </div>
