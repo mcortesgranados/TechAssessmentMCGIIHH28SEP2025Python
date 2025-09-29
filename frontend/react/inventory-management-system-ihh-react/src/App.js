@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import ProductList from './pages/ProductList'; // <-- import ProductList
+import ProductEdit from './pages/ProductEdit'; // <-- import ProductList
 import AuthenticatedPage from './pages/AuthenticatedPage';
 
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/authenticated" element={<AuthenticatedPage token={token} />} />
             <Route path="/products" element={<ProductList token={token} />} />
+            <Route path="/products/edit/:id" element={<ProductEdit />} />
           </Routes>
         </header>
       </div>
