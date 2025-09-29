@@ -3,6 +3,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.application.services.user_application_service import UserApplicationService
 from app.adapters.auth.jwt_manager import JWTManager
 from app.application.dto.user_dto import TokenDTO, UserCreateDTO, UserDTO
+from app.application.dto.user_dto import TokenDTO
+
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -29,3 +31,11 @@ def register(user_in: UserCreateDTO):
         return UserDTO.from_model(user)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@router.post("/login", response_model=TokenDTO)
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = user_service.authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    access_token = JWTManager.create_access_token({"sub": user.username})
+    return TokenDTO(access_token=access_token)    
